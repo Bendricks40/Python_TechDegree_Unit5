@@ -7,6 +7,7 @@ DEBUG = True
 PORT = 8000
 HOST = '0.0.0.0'
 
+
 app = Flask(__name__)
 app.secret_key = 'djkc8@mndp40t*B)*#&$@dmf>#<#<?#<>s.D>Sfaezi'
 

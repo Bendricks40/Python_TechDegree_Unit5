@@ -1,0 +1,5 @@
+.idea
+inventory.db
+backup.csv
+venv/
+blah/

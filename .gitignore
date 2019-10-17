@@ -3,3 +3,4 @@ inventory.db
 backup.csv
 venv/
 blah/
+__pycache__/

@@ -27,7 +27,9 @@
                     <form method="post" action="/new">
                       {{ form.hidden_tag() }}
                       {% for field in form %}
-                      {{ render_field(field) }}
+                          {% if field.label.text != 'CSRF Token' %}
+                            {{ render_field(field) }}
+                          {% endif %}
                       {% endfor %}
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="#" class="button button-secondary">Cancel</a>

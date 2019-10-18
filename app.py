@@ -1,7 +1,5 @@
-from flask import (Flask, g, render_template, flash, redirect, url_for)
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from flask_bcrypt import check_password_hash
-from wtforms.fields.html5 import DateField
+from flask import (Flask, g, render_template, redirect, url_for, request)
+
 
 import forms
 import models
@@ -13,14 +11,13 @@ HOST = '0.0.0.0'
 
 
 app = Flask(__name__)
-app.secret_key = 'djkc8@mndp40t*B)*#&$@dmf>#<#<?#<>s.D>Sfaezi'
+app.secret_key = 'djkc8@mndp40t*B)>s.D>Sfaezi'
 
 
 @app.before_request
 def before_request():
     """Connect to the database before each request"""
     g.db = models.DATABASE
-    print('connected to database!')
     g.db.connect()
 
 
@@ -28,7 +25,6 @@ def before_request():
 def after_request(response):
     """Close the database after each request"""
     g.db.close()
-    print('closed database!')
     return response
 
 
@@ -46,8 +42,8 @@ def create():
     if form.validate_on_submit():
         models.Entries.create_entry(
             title=form.title.data,
-            dateCreated=form.dateCreated.data,
-            timeSpent=form.timeSpent.data,
+            datecreated=form.dateCreated.data,
+            timespent=form.timeSpent.data,
             learned=form.learned.data,
             resources=form.resources.data
         )
@@ -57,13 +53,30 @@ def create():
 
 @app.route('/entries/<int:entry_id>')
 def details(entry_id):
-    entry = models.Entries.select().where(models.Entries.id==entry_id)
+    entry = models.Entries.select().where(models.Entries.id == entry_id)
     return render_template('detail.html', entry=entry)
 
 
-@app.route('/entries/<id>/edit')
-def edit():
-    return "This is where you edit an entry by it's ID"
+@app.route('/entries/<int:entry_id>/edit',  methods=('GET', 'POST'))
+def edit(entry_id):
+    entry = models.Entries.get_or_none(models.Entries.id == entry_id)
+    form = forms.JournalEntry(obj=entry)
+    if request.method == 'POST':
+        print("Form has been posted!")
+        print(entry_id)
+        print(form.title.data)
+    if form.validate_on_submit():
+        print('in the edit validate on submit if statement')
+        models.Entries.update(
+            title=form.title.data,
+            dateCreated=form.dateCreated.data,
+            timeSpent=form.timeSpent.data,
+            learned=form.learned.data,
+            resources=form.resources.data
+        ).where(models.Entries.id == entry_id).execute()
+        print("just finished the attempt at updating, about to redirect to Index")
+        return redirect(url_for('index'))
+    return render_template('edit.html', entry=entry, form=form)
 
 
 @app.route('/entries/<id>/delete')

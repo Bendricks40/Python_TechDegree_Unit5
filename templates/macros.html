@@ -2,10 +2,11 @@
 <div class="field">
      {% if field.errors %}
          {% for error in field.errors %}
-         <div class="notification error">{{ error }}</div>
+         <div class="notification error"><font color="red">{{ error }}</font></div>
          {% endfor %}
      {% endif %}
-     {{ field(placeholder=field.label.text) }}
+     {{ field.label }}
+     {{ field(**kwargs) }}
  </div>
 {% endmacro %}
 

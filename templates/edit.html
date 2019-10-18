@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from 'macros.html' import render_field %}
 <html>
     <head>
         <meta charset="utf-8">
@@ -7,15 +8,15 @@
         <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="static/css/normalize.css">
-        <link rel="stylesheet" href="static/css/site.css">
+        <link rel="stylesheet" href="../../static/css/normalize.css">
+        <link rel="stylesheet" href="../../static/css/site.css">
     </head>
     <body>
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href={{ url_for('index') }}><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href={{ url_for('create') }} ><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
@@ -23,20 +24,16 @@
             <div class="container">
                 <div class="edit-entry">
                     <h2>Edit Entry</h2>
-                    <form>
-                        <label for="title"> Title</label>
-                        <input id="title" type="text" name="title"><br>
-                        <label for="date">Date</label>
-                        <input id="date" type="date" name="date"><br>
-                        <label for="time-spent"> Time Spent</label>
-                        <input id="time-spent" type="text" name="timeSpent"><br>
-                        <label for="what-i-learned">What I Learned</label>
-                        <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
-                        <label for="resources-to-remember">Resources to Remember</label>
-                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
-                        <input type="submit" value="Publish Entry" class="button">
-                        <a href="#" class="button button-secondary">Cancel</a>
-                    </form>
+            <form method="POST" action="/entries/{{ entry.id }}/edit">
+                {{ form.csrf_token }}
+                {% for field in form %}
+                    {% if field.label.text != 'CSRF Token' %}
+                      {{ render_field(field) }}
+                    {% endif %}
+                {% endfor %}
+                <input type="submit" value="Update Entry" class="button">
+                <a href={{ url_for('details', entry_id=entry.id) }} class="button button-secondary">Cancel</a>
+            </form>
                 </div>
             </div>
         </section>

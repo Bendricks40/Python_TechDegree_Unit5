@@ -14,7 +14,7 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
+                    <a class="logo" href=" {{ url_for('index') }} "><i class="material-icons">library_books</i></a>
                     <a class="button icon-right" href="/new"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
@@ -22,10 +22,6 @@
         <section>
             <div class="container">
                 <div class="entry-list">
-                    <article>
-                        <h2><a href="detail.html">The best day I’ve ever had</a></h2>
-                        <time datetime="2016-01-31">January 31, 2016</time>
-                    </article>
                     {% for entry in entries %}
                        <article>
                            <h2><a href="{{ url_for('details', entry_id=entry.id) }}">{{ entry.title }}</a></h2>

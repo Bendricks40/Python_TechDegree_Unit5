@@ -13,15 +13,15 @@ class Entries(Model):
     resources = TextField()
 
     @classmethod
-    def create_entry(cls, title, timeSpent, learned, resources, dateCreated):
+    def create_entry(cls, title, timespent, learned, resources, datecreated):
         try:
             with DATABASE.transaction():
                 cls.create(
                     title=title,
-                    timeSpent=timeSpent,
+                    timeSpent=timespent,
                     learned=learned,
                     resources=resources,
-                    dateCreated=dateCreated)
+                    dateCreated=datecreated)
         except IntegrityError:
             raise ValueError("Entry already exists!")
 

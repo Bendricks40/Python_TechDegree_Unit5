@@ -4,3 +4,4 @@ backup.csv
 venv/
 blah/
 __pycache__/
+journal.db

@@ -7,8 +7,8 @@ DATABASE = SqliteDatabase('journal.db')
 
 class Entries(Model):
     title = TextField()
-    dateCreated = DateTimeField(default=datetime.datetime.now)
-    timeSpent = TextField()
+    dateCreated = DateField(default=datetime.datetime.now)
+    timeSpent = IntegerField()
     learned = TextField()
     resources = TextField()
 

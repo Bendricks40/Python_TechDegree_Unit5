@@ -36,27 +36,14 @@ def after_request(response):
 @app.route('/entries')
 @app.route('/index.html')
 def index():
-    return render_template('index.html')
+    entries = models.Entries.select()
+    return render_template('index.html', entries=entries)
 
 
 @app.route('/new', methods=('GET', 'POST'))
 def create():
-    print("im in the create function")
     form = forms.JournalEntry()
-    print("about to do the if statement")
-    print(form.title.data)
-    print("here are results of the validate on submit check: " + str(form.validate_on_submit()))
-    if form.is_submitted():
-        print("submitted")
-    if form.validate():
-        print("valid")
     if form.validate_on_submit():
-        print("the form was validated successfully")
-        print("Title: " + form.title.data)
-        print(form.dateCreated.data)
-        print("Time Spend: " + form.timeSpent.data)
-        print("Learned: " + form.learned.data)
-        print("resources: " + form.resources.data)
         models.Entries.create_entry(
             title=form.title.data,
             dateCreated=form.dateCreated.data,
@@ -68,9 +55,10 @@ def create():
     return render_template('new.html', form=form)
 
 
-@app.route('/entries/<id>')
-def details():
-    return "This is the entries page where you view a specific entry by it's id"
+@app.route('/entries/<int:entry_id>')
+def details(entry_id):
+    entry = models.Entries.select().where(models.Entries.id==entry_id)
+    return render_template('detail.html', entry=entry)
 
 
 @app.route('/entries/<id>/edit')

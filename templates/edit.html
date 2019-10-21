@@ -32,6 +32,7 @@
                     {% endif %}
                 {% endfor %}
                 <input type="submit" value="Update Entry" class="button">
+                <a href={{ url_for('delete', entry_id=entry.id) }} class="button" onclick="return confirm('Are you sure you want to delete this Journal entry?');">Delete Entry</a>
                 <a href={{ url_for('details', entry_id=entry.id) }} class="button button-secondary">Cancel</a>
             </form>
                 </div>

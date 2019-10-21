@@ -57,6 +57,13 @@ def details(entry_id):
     return render_template('detail.html', entry=entry)
 
 
+@app.route('/entries/<int:entry_id>/delete')
+def delete(entry_id):
+    models.Entries.delete().where(models.Entries.id == entry_id).execute()
+    print("just deleted it, now redirecting back to index")
+    return redirect(url_for('index'))
+
+
 @app.route('/entries/<int:entry_id>/edit',  methods=('GET', 'POST'))
 def edit(entry_id):
     entry = models.Entries.get_or_none(models.Entries.id == entry_id)
@@ -77,11 +84,6 @@ def edit(entry_id):
         print("just finished the attempt at updating, about to redirect to Index")
         return redirect(url_for('index'))
     return render_template('edit.html', entry=entry, form=form)
-
-
-@app.route('/entries/<id>/delete')
-def delete():
-    return "This is the entries/<id>/delete page where you would be deleting a specific entry"
 
 
 if __name__ == '__main__':

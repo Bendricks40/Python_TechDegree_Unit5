@@ -30,6 +30,7 @@ class Entries(Model):
         order_by = ('-timestamp',)
 
 
+# Initialize the program by connecting to database, creating table if need be, then closing db
 def initialize():
     DATABASE.connect()
     DATABASE.create_tables([Entries], safe=True)

@@ -1,6 +1,5 @@
 from flask import (Flask, g, render_template, redirect, url_for, request)
 
-
 import forms
 import models
 
@@ -12,6 +11,12 @@ HOST = '0.0.0.0'
 
 app = Flask(__name__)
 app.secret_key = 'djkc8@mndp40t*B)>s.D>Sfaezi'
+
+
+@app.errorhandler(404)
+def fourofour(e):
+    """Loads the 404 page when unknown URL is hit"""
+    return render_template('404.html')
 
 
 @app.before_request
@@ -60,11 +65,14 @@ def details(entry_id):
     return render_template('detail.html', entry=entry)
 
 
-@app.route('/entries/<int:entry_id>/delete')
+@app.route('/entries/<int:entry_id>/delete', methods=['GET', 'POST'])
 def delete(entry_id):
     """Deletes the specified Journal entry by its ID"""
-    models.Entries.delete().where(models.Entries.id == entry_id).execute()
-    print("just deleted it, now redirecting back to index")
+    if models.Entries.select().where(models.Entries.id == entry_id):
+        models.Entries.delete().where(models.Entries.id == entry_id).execute()
+        print("just deleted it, now redirecting back to index")
+    else:
+        print("that entry doesn't exist...")
     return redirect(url_for('index'))
 
 

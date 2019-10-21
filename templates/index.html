@@ -22,6 +22,8 @@
         <section>
             <div class="container">
                 <div class="entry-list">
+                    {% block content %}
+                    {% endblock %}
                     {% for entry in entries %}
                        <article>
                            <h2><a href="{{ url_for('details', entry_id=entry.id) }}">{{ entry.title }}</a></h2>

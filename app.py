@@ -32,12 +32,14 @@ def after_request(response):
 @app.route('/entries')
 @app.route('/index.html')
 def index():
+    """Load the "home" page with all entries"""
     entries = models.Entries.select()
     return render_template('index.html', entries=entries)
 
 
 @app.route('/new', methods=('GET', 'POST'))
 def create():
+    """Makes a new Journal Entry"""
     form = forms.JournalEntry()
     if form.validate_on_submit():
         models.Entries.create_entry(
@@ -53,12 +55,14 @@ def create():
 
 @app.route('/entries/<int:entry_id>')
 def details(entry_id):
+    """Displays the details of a specific Journal entry per the passed in ID"""
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     return render_template('detail.html', entry=entry)
 
 
 @app.route('/entries/<int:entry_id>/delete')
 def delete(entry_id):
+    """Deletes the specified Journal entry by its ID"""
     models.Entries.delete().where(models.Entries.id == entry_id).execute()
     print("just deleted it, now redirecting back to index")
     return redirect(url_for('index'))
@@ -66,6 +70,7 @@ def delete(entry_id):
 
 @app.route('/entries/<int:entry_id>/edit',  methods=('GET', 'POST'))
 def edit(entry_id):
+    """Passed the chosen entry to the edit page so a user can make edits or delete the entry"""
     entry = models.Entries.get_or_none(models.Entries.id == entry_id)
     form = forms.JournalEntry(obj=entry)
     if request.method == 'POST':
@@ -73,7 +78,6 @@ def edit(entry_id):
         print(entry_id)
         print(form.title.data)
     if form.validate_on_submit():
-        print('in the edit validate on submit if statement')
         models.Entries.update(
             title=form.title.data,
             dateCreated=form.dateCreated.data,
@@ -81,7 +85,6 @@ def edit(entry_id):
             learned=form.learned.data,
             resources=form.resources.data
         ).where(models.Entries.id == entry_id).execute()
-        print("just finished the attempt at updating, about to redirect to Index")
         return redirect(url_for('index'))
     return render_template('edit.html', entry=entry, form=form)
 
